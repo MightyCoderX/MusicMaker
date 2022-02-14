@@ -20,12 +20,20 @@ body
     place-items: center;
 }
 
+select
+{
+    position: absolute;
+    top: 1rem;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+}
+
 .piano-keyboard
 {
     display: flex;
     align-items: flex-start;
     user-select: none;
-    font-size: 2rem;
+    font-size: 3vmax;
 }
 
 .piano-keyboard .octave

@@ -1,4 +1,5 @@
-const keys = document.querySelectorAll("[data-key]");
+const selectWaveType = document.getElementById('selectWaveType');
+const keys = document.querySelectorAll('[data-key]');
 
 const audioCtx = new window.AudioContext();
 
@@ -46,7 +47,7 @@ keys.forEach(key =>
 function playKey(frequency, endcallback)
 {
     const oscillator = audioCtx.createOscillator();
-    oscillator.type = 'square';
+    oscillator.type = selectWaveType.value;
     oscillator.frequency.value = frequency;
     oscillator.connect(audioCtx.destination);
     if(endcallback)
