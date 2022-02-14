@@ -1,0 +1,71 @@
+*,
+*::before,
+*::after
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body
+{
+    background-color: #222;
+    width: 100%;
+    height: 100%;
+}
+
+body
+{
+    display: grid;
+    place-items: center;
+}
+
+.piano-keyboard
+{
+    display: flex;
+    align-items: flex-start;
+    user-select: none;
+    font-size: 2rem;
+}
+
+.piano-keyboard .octave
+{
+    display: flex;
+    align-items: flex-start;
+    user-select: none;
+}
+
+.key
+{
+    --key-height: 6em;
+    --shadow-lightness: 80%;
+    --start-shadow-size: 0.5em;
+    --shadow-size: var(--start-shadow-size);
+    width: 2em;
+    height: var(--key-height);
+    background-color: hsl(0, 0%, 100%);
+    border: 1px solid #cacaca;
+    border-radius: 0 0 0.2em 0.2em;
+    box-shadow: 0 var(--shadow-size) 0 hsl(0, 0%, var(--shadow-lightness));
+    transition: 0.2s;
+}
+
+.key.small
+{
+    --key-height: 3.75em;
+    --shadow-lightness: 20%;
+    --start-shadow-size: 0.3em;
+    background-color: hsl(0, 0%, 0%);
+    width: 1em;
+    margin-inline: -0.5em;
+    margin-top: -0.25em;
+    z-index: 1;
+    position: relative;
+}
+
+.key:active
+{
+    --scale-factor: 1.08;
+    --shadow-size: 0em;
+    transform: translateY(var(--start-shadow-size)) scaleY(var(--scale-factor)) ;
+}
