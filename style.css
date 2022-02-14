@@ -18,6 +18,7 @@ body
 {
     display: grid;
     place-items: center;
+    overflow: hidden;
 }
 
 select
@@ -33,7 +34,8 @@ select
     display: flex;
     align-items: flex-start;
     user-select: none;
-    font-size: 3vmax;
+    font-size: min(3rem, 10vmin);
+    margin-top: 2rem;
 }
 
 .piano-keyboard .octave
@@ -45,11 +47,12 @@ select
 
 .key
 {
-    --key-height: 6em;
+    --key-width: 1.5em;
+    --key-height: 5em;
     --shadow-lightness: 80%;
-    --start-shadow-size: 0.5em;
+    --start-shadow-size: calc(var(--key-height) / 15);
     --shadow-size: var(--start-shadow-size);
-    width: 2em;
+    width: var(--key-width);
     height: var(--key-height);
     background-color: hsl(0, 0%, 100%);
     border: 1px solid #cacaca;
@@ -60,18 +63,22 @@ select
 
 .key.small
 {
-    --key-height: 3.75em;
+    --small-key-width: calc(var(--key-width) / 2);
+    --small-key-height: calc(var(--key-height) / 1.6);
     --shadow-lightness: 20%;
     --start-shadow-size: 0.3em;
+
+
     background-color: hsl(0, 0%, 0%);
-    width: 1em;
-    margin-inline: -0.5em;
+    width: var(--small-key-width);
+    height: var(--small-key-height);
+    margin-inline: calc(var(--small-key-width) / 2 * -1);
     margin-top: -0.25em;
     z-index: 1;
     position: relative;
 }
 
-.key:active
+.key.active
 {
     --scale-factor: 1.08;
     --shadow-size: 0em;
