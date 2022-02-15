@@ -1,4 +1,8 @@
-const selectWaveType = document.getElementById('selectWaveType');
+const optionsElem = document.querySelector('.options');
+const selectWaveType = optionsElem.querySelector('#selectWaveType');
+const slideOctaveRange = optionsElem.querySelector('#slideOctaveRange');
+const numOctaveRange = optionsElem.querySelector('#numOctaveRange');
+
 const pianoKeyboard = document.querySelector('.piano-keyboard');
 const keys = pianoKeyboard.querySelectorAll('[data-key]');
 
@@ -19,14 +23,35 @@ const notes = {
 
 let audioCtx;
 
+let options = 
+{
+    octaveFactor: slideOctaveRange.value
+}
+
 pianoKeyboard.addEventListener('contextmenu', e => e.preventDefault());
 
 keys.forEach(key =>
 {
-    let note = notes[key.dataset.key] * 8 * key.parentElement.dataset.octave;
+    let note = notes[key.dataset.key];
+    let octave = key.parentElement.dataset.octave;
+    let frequency = note * options.octaveFactor * octave;
 
     let gainNode;
     let oscillator;
+
+    const updateFrequency = e =>
+    {
+        const factor = e.target.value;
+        numOctaveRange.value = factor;
+        slideOctaveRange.value = factor;
+        slideOctaveRange.title = factor;
+        options.octaveFactor = factor;
+        frequency = note * options.octaveFactor * octave;
+    }
+
+    slideOctaveRange.addEventListener('input', updateFrequency);
+
+    numOctaveRange.addEventListener('input', updateFrequency);
 
     const pressPianoKey = () =>
     {
@@ -34,7 +59,7 @@ keys.forEach(key =>
 
         gainNode = audioCtx.createGain();
         gainNode.connect(audioCtx.destination);
-        oscillator = playNote(note, gainNode);
+        oscillator = playNote(frequency, gainNode);
     }
 
     const pianoKeyDown = e =>
@@ -59,7 +84,6 @@ keys.forEach(key =>
     
     const pianoKeyUp = e =>
     {
-        console.log(e.button === 0, e.button === 2);
         if(e.button !== undefined && e.button !== 0) return;
 
         key.classList.remove('active');

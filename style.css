@@ -5,11 +5,13 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 html, body
 {
     background-color: #222;
+    color: #ddd;
     width: 100%;
     height: 100%;
 }
@@ -21,12 +23,35 @@ body
     overflow: hidden;
 }
 
-select
+.options
 {
     position: absolute;
-    top: 1rem;
+    top: 1em;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    gap: 2em;
+}
+
+.options label
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 1em;
+}
+
+.options .wave-type
+{
     padding: 0.5rem;
     font-size: 1.2rem;
+}
+
+.options .octave-range input[type="range"]
+{
+    width: calc(256 * 0.1em);
+    max-width: 200px;
 }
 
 .piano-keyboard

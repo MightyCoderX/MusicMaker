@@ -7,12 +7,13 @@
 
         <link rel="stylesheet" href="style.css">
 
-        <script src="app.js" defer></script>
-
+        <script src="js/app.js" defer></script>
+        <script src="js/piano-keyboard.js" defer></script>
     </head>
     <body>
         <div class="options">
-            <label for="selectWaveType">
+            <label for="selectWaveType" class="wave-type">
+                <span>Wave Type</span>
                 <select id="selectWaveType">
                     <option value="sawtooth">Sawtooth</option>
                     <option value="sine">Sine</option>
@@ -21,8 +22,10 @@
                 </select>
             </label>
             
-            <label for="slideOctaveRange">
-                <input type="range" id="slideOctaveRange">
+            <label for="slideOctaveRange" class="octave-range">
+                <span title="Open for suggestions to give this feature the correct name">Octave Range*</span>
+                <input type="range" id="slideOctaveRange" min="1" max="256" step="1" value="4" title="4">
+                <input type="number" id="numOctaveRange" min="1" max="256" step="1" value="4">
             </label>
         </div>
         
