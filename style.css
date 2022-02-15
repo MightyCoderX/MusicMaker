@@ -42,16 +42,23 @@ body
     gap: 1em;
 }
 
-.options .wave-type
+.options .wave-type select
 {
-    padding: 0.5rem;
-    font-size: 1.2rem;
+    font-size: 1rem;
+    padding: 0.5em;
 }
 
 .options .octave-range input[type="range"]
 {
     width: calc(256 * 0.1em);
     max-width: 200px;
+}
+
+.options .octave-range input[type="number"]
+{
+    font-size: 1rem;
+    padding: 0.5em;
+    text-align: center;
 }
 
 .piano-keyboard
