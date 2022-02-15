@@ -1,5 +1,6 @@
 const selectWaveType = document.getElementById('selectWaveType');
-const keys = document.querySelectorAll('[data-key]');
+const pianoKeyboard = document.querySelector('.piano-keyboard');
+const keys = pianoKeyboard.querySelectorAll('[data-key]');
 
 const notes = {
     'c': 16.35,
@@ -18,94 +19,83 @@ const notes = {
 
 let audioCtx;
 
-let touchActive = false;
+pianoKeyboard.addEventListener('contextmenu', e => e.preventDefault());
 
 keys.forEach(key =>
 {
-    const note = notes[key.dataset.key]*8*key.parentElement.dataset.octave;
-    console.log(note);
+    let note = notes[key.dataset.key] * 8 * key.parentElement.dataset.octave;
 
+    let gainNode;
     let oscillator;
+
+    const pressPianoKey = () =>
+    {
+        key.classList.add('active');
+
+        gainNode = audioCtx.createGain();
+        gainNode.connect(audioCtx.destination);
+        oscillator = playNote(note, gainNode);
+    }
 
     const pianoKeyDown = e =>
     {
         if(!audioCtx)
         {
-            audioCtx = new window.AudioContext();
+            audioCtx = new AudioContext();
         }
 
-        console.log(e.target);
+        if(e.button !== undefined && e.button !== 0) return;
 
-        key.classList.add('active');
-
-        oscillator = playNote(note);
+        pressPianoKey();        
 
         key.addEventListener('mouseup', pianoKeyUp);
         key.addEventListener('mouseleave', pianoKeyUp);
         key.addEventListener('mouseout', pianoKeyUp);
         
         // Mobile
-        key.addEventListener('touchend', touchEnd);
+        key.addEventListener('touchend', pianoKeyUp);
         key.addEventListener('touchcancel', pianoKeyUp);
     }
     
-    const pianoKeyUp = () =>
+    const pianoKeyUp = e =>
     {
+        console.log(e.button === 0, e.button === 2);
+        if(e.button !== undefined && e.button !== 0) return;
+
         key.classList.remove('active');
-        oscillator.stop();
+        gainNode.gain.setValueAtTime(gainNode.gain.value, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1);
+        oscillator.stop(audioCtx.currentTime + 1);
 
         key.removeEventListener('mouseup', pianoKeyUp);
         key.removeEventListener('mouseleave', pianoKeyUp);
         key.removeEventListener('mouseout', pianoKeyUp);
 
         // Mobile
-        key.removeEventListener('touchmove', touchMove);
-        key.removeEventListener('touchend', touchEnd);
+        key.removeEventListener('touchend', pianoKeyUp);
         key.removeEventListener('touchcancel', pianoKeyUp);
     }
 
     
     key.addEventListener('mousedown', pianoKeyDown);
-
-    // Mobile
-    const touchMove = e =>
-    {
-        if(touchActive)
-        {
-            note = notes[e.target.dataset.key]*8*e.target.parentElement.dataset.octave;
-            oscillator = playNote(note);
-        }
-        else
-        {
-            pianoKeyUp();
-        }
-    }
-
-    const touchEnd = e =>
-    {
-        touchActive = false;
-        pianoKeyUp(e);
-    }
-
-    key.addEventListener('touchmove', touchMove);
-    key.addEventListener('touchstart', e =>
-    {
-        touchActive = true;
-        pianoKeyDown(e);
-    });
+    key.addEventListener('touchstart', pianoKeyDown);
 });
 
-function playNote(frequency, endcallback)
+function playNote(frequency, gainNode, endcallback)
 {
     const oscillator = audioCtx.createOscillator();
     oscillator.type = selectWaveType.value;
     oscillator.frequency.value = frequency;
-    oscillator.connect(audioCtx.destination);
+    oscillator.connect(gainNode);
+
+    gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+
     if(endcallback)
     {
         oscillator.addEventListener('ended', endcallback);
     }
-    oscillator.start(0);
+
+    oscillator.start();
 
     return oscillator;
 }

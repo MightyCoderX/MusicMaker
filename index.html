@@ -11,12 +11,21 @@
 
     </head>
     <body>
-        <select id="selectWaveType">
-            <option value="sawtooth">Sawtooth</option>
-            <option value="sine">Sine</option>
-            <option value="square">Square</option>
-            <option value="triangle">Triangle</option>
-        </select>
+        <div class="options">
+            <label for="selectWaveType">
+                <select id="selectWaveType">
+                    <option value="sawtooth">Sawtooth</option>
+                    <option value="sine">Sine</option>
+                    <option value="square">Square</option>
+                    <option value="triangle">Triangle</option>
+                </select>
+            </label>
+            
+            <label for="slideOctaveRange">
+                <input type="range" id="slideOctaveRange">
+            </label>
+        </div>
+        
         <div class="piano-keyboard">
             <div class="octave" data-octave="1">
                 <div class="key" data-key="c"></div>
