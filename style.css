@@ -48,8 +48,8 @@ select
 .key
 {
     --key-width: 1.5em;
-    --key-height: 5em;
-    --shadow-lightness: 80%;
+    --key-height: calc(var(--key-width) * 4);
+    --shadow-lightness: 50%;
     --start-shadow-size: calc(var(--key-height) / 15);
     --shadow-size: var(--start-shadow-size);
     width: var(--key-width);
