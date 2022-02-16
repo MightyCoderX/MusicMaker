@@ -81,7 +81,7 @@ function setupKeyboard(octaveCount)
         {
             key.classList.add('active');
 
-            if(playingOscillators[key]) playingOscillators[key].stop();
+            if(playingOscillators[key.dataset.key + octave]) playingOscillators[key.dataset.key + octave].stop();
 
             gainNode = audioCtx.createGain();
             gainNode.connect(audioCtx.destination);
