@@ -3,61 +3,64 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta name="theme-color" content="#04040f">
         <title>Music Maker</title>
 
         <link rel="stylesheet" href="style.css">
 
+        <script src="js/generate-octaves.js" defer></script>
         <script src="js/app.js" defer></script>
     </head>
     <body>
-        <div class="options">
-            <label for="selectWaveType" class="wave-type">
-                <span>Wave Type</span>
-                <select id="selectWaveType">
-                    <option value="sawtooth">Sawtooth</option>
-                    <option value="sine">Sine</option>
-                    <option value="square">Square</option>
-                    <option value="triangle">Triangle</option>
-                </select>
-            </label>
-            
-            <label for="slideOctaveRange" class="octave-range">
-                <span title="Open for suggestions to give this feature the correct name">Octave Range*</span>
-                <input type="range" id="slideOctaveRange" min="1" max="256" step="1" value="4" title="4">
-                <input type="number" id="numOctaveRange" min="1" max="256" step="1" value="4">
-            </label>
-        </div>
-        
-        <div class="piano-keyboard">
-            <div class="octave" data-octave="1">
-                <div class="key" data-key="c"></div>
-                <div class="key small" data-key="c#"></div>
-                <div class="key" data-key="d"></div>
-                <div class="key small" data-key="d#"></div>
-                <div class="key" data-key="e"></div>
-                <div class="key" data-key="f"></div>
-                <div class="key small" data-key="f#"></div>
-                <div class="key" data-key="g"></div>
-                <div class="key small" data-key="g#"></div>
-                <div class="key" data-key="a"></div>
-                <div class="key small" data-key="a#"></div>
-                <div class="key" data-key="b"></div>
+        <div class="piano">
+
+            <div class="options">
+                <label for="selectWaveType" class="wave-type">
+                    <span>Wave Type</span>
+                    <select id="selectWaveType">
+                        <option value="sawtooth">Sawtooth</option>
+                        <option value="sine" selected>Sine</option>
+                        <option value="square">Square</option>
+                        <option value="triangle">Triangle</option>
+                    </select>
+                </label>
+                
+                <label for="numOctaveCount" class="octave-count">
+                    <span title="Number of octaves on the piano keyboard">Octaves</span>
+                    <input type="number" id="numOctaveCount" min="1" step="1" value="2">
+                </label>
+
+                <label for="slideOctaveOffset" class="octave-offset">
+                    <span title="If you know the correct term for it please tell me lol">Octave "Offset"</span>
+                    <input type="number" id="numOctaveOffset" min="1" max="256" step="1" value="10">
+                    <!-- <input type="range" id="slideOctaveOffset" min="1" max="256" step="1" value="10" title="4"> -->
+                </label>
+
+                <label for="numResonanceTime" class="resonance-time">
+                    <span title="The duration in seconds of the key resonance">Resonance Time</span>
+                    <input type="number" id="numResonanceTime" min="0" step="0.1" value="1">
+                </label>
             </div>
             
-            <div class="octave" data-octave="2">
-                <div class="key" data-key="c"></div>
-                <div class="key small" data-key="c#"></div>
-                <div class="key" data-key="d"></div>
-                <div class="key small" data-key="d#"></div>
-                <div class="key" data-key="e"></div>
-                <div class="key" data-key="f"></div>
-                <div class="key small" data-key="f#"></div>
-                <div class="key" data-key="g"></div>
-                <div class="key small" data-key="g#"></div>
-                <div class="key" data-key="a"></div>
-                <div class="key small" data-key="a#"></div>
-                <div class="key" data-key="b"></div>
+            <div class="piano-keyboard">
+                <template id="octaveTemplate">
+                    <div class="octave" data-octave="1">
+                        <div class="key" data-key="c"></div>
+                        <div class="key small" data-key="c#"></div>
+                        <div class="key" data-key="d"></div>
+                        <div class="key small" data-key="d#"></div>
+                        <div class="key" data-key="e"></div>
+                        <div class="key" data-key="f"></div>
+                        <div class="key small" data-key="f#"></div>
+                        <div class="key" data-key="g"></div>
+                        <div class="key small" data-key="g#"></div>
+                        <div class="key" data-key="a"></div>
+                        <div class="key small" data-key="a#"></div>
+                        <div class="key" data-key="b"></div>
+                    </div>
+                </template>
             </div>
+
         </div>
     </body>
 </html>
