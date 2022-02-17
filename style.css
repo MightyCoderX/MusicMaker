@@ -45,6 +45,7 @@ body
     padding-bottom: 1rem;
     gap: 2rem;
     width: 100%;
+    flex-wrap: wrap;
 }
 
 .options label
