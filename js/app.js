@@ -25,7 +25,6 @@ const notes = {
 let playingOscillators = {};
 
 let audioCtx;
-let channelMerger;
 
 let options = 
 {
@@ -84,16 +83,19 @@ function setupKeyboard(octaveCount)
         {
             key.classList.add('active');
 
-            if(playingOscillators[key.dataset.key + octave]) playingOscillators[key.dataset.key + octave].stop();
-            
-            channelMerger = audioCtx.createChannelMerger(Object.keys(playingOscillators).length || 1);
-            channelMerger.connect(audioCtx.destination);
+            const keyId = key.dataset.key + octave;
+
+            if(playingOscillators[keyId]) playingOscillators[keyId].stop();
 
             gainNode = audioCtx.createGain();
-            gainNode.connect(channelMerger, 0);
-            oscillator = playNote(frequency, gainNode);
+            gainNode.connect(audioCtx.destination);
 
-            playingOscillators[key.dataset.key + octave] = oscillator;
+            oscillator = playNote(frequency, gainNode, () => 
+            {
+                delete playingOscillators[keyId];
+            });
+
+            playingOscillators[keyId] = oscillator;
         }
 
         const pianoKeyDown = e =>
@@ -101,8 +103,6 @@ function setupKeyboard(octaveCount)
             if(!audioCtx)
             {
                 audioCtx = new AudioContext();
-                channelMerger = audioCtx.createChannelMerger(1);
-                channelMerger.connect(audioCtx.destination);
             }
 
             if(e.button !== undefined && e.button !== 0) return;
