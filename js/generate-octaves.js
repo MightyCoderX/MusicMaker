@@ -3,6 +3,9 @@ const octaveTemplate = document.getElementById('octaveTemplate');
 
 function generateOctaves(count)
 {
+    document.documentElement.style
+    .setProperty('--octave-count', ` ${count}`);
+
     pianoKeyboard.innerHTML = '';
     for(let i = 1; i <= count; i++)
     {

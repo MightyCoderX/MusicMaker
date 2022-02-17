@@ -22,16 +22,18 @@ const notes = {
     'b': 30.87
 }
 
-let playingOscillators = {};
-
 let audioCtx;
 
 let options = 
 {
-    octaveCount: 2,
-    octaveFactor: 10,
+    octaveCount: window.innerWidth < 700 ? 1 : 2,
+    octaveOffset: 10,
     resonanceTime: 1
 }
+
+numOctaveCount.value = options.octaveCount;
+numOctaveOffset.value = options.octaveOffset;
+numResonanceTime.value = options.resonanceTime;
 
 let pianoKeyDownArray = [];
 
@@ -60,7 +62,7 @@ function setupKeyboard(octaveCount)
     {
         let note = notes[key.dataset.key];
         let octave = key.parentElement.dataset.octave;
-        let frequency = note * options.octaveFactor * octave;
+        let frequency = note * options.octaveOffset * octave;
 
         let gainNode;
         let oscillator;
@@ -71,8 +73,8 @@ function setupKeyboard(octaveCount)
             numOctaveOffset.value = factor;
             // slideOctaveOffset.value = factor;
             // slideOctaveOffset.title = factor;
-            options.octaveFactor = factor;
-            frequency = note * options.octaveFactor * octave;
+            options.octaveOffset = factor;
+            frequency = note * options.octaveOffset * octave;
         }
 
         // slideOctaveOffset.addEventListener('input', updateFrequency);
@@ -85,17 +87,12 @@ function setupKeyboard(octaveCount)
 
             const keyId = key.dataset.key + octave;
 
-            if(playingOscillators[keyId]) playingOscillators[keyId].stop();
+            if(oscillator) oscillator.stop(audioCtx.currentTime);
 
             gainNode = audioCtx.createGain();
             gainNode.connect(audioCtx.destination);
 
-            oscillator = playNote(frequency, gainNode, () => 
-            {
-                delete playingOscillators[keyId];
-            });
-
-            playingOscillators[keyId] = oscillator;
+            oscillator = playNote(frequency, gainNode);
         }
 
         const pianoKeyDown = e =>
