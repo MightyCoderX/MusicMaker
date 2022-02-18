@@ -31,6 +31,20 @@ let options =
     resonanceTime: 1
 }
 
+loadOptions();
+
+function loadOptions()
+{
+    if(!localStorage.getItem('options')) return;
+
+    options = JSON.parse(localStorage.getItem('options'));
+}
+
+function saveOptions()
+{
+    localStorage.setItem('options', JSON.stringify(options));
+}
+
 numOctaveCount.value = options.octaveCount;
 numOctaveOffset.value = options.octaveOffset;
 numResonanceTime.value = options.resonanceTime;
@@ -41,11 +55,13 @@ numOctaveCount.addEventListener('change', () =>
 {
     options.octaveCount = Number(numOctaveCount.value);
     setupKeyboard(options.octaveCount);
+    saveOptions();
 });
 
 numResonanceTime.addEventListener('change', () =>
 {
     options.resonanceTime = Number(numResonanceTime.value);
+    saveOptions();
 });
 
 setupKeyboard(options.octaveCount);
@@ -75,6 +91,8 @@ function setupKeyboard(octaveCount)
             // slideOctaveOffset.title = factor;
             options.octaveOffset = factor;
             frequency = note * options.octaveOffset * octave;
+            
+            saveOptions();
         }
 
         // slideOctaveOffset.addEventListener('input', updateFrequency);
@@ -140,7 +158,6 @@ function setupKeyboard(octaveCount)
     });
 }
 
-
 function playNote(frequency, gainNode, endcallback)
 {
     const oscillator = audioCtx.createOscillator();
@@ -159,3 +176,5 @@ function playNote(frequency, gainNode, endcallback)
 
     return oscillator;
 }
+
+window.addEventListener('close', saveOptions);
