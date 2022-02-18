@@ -111,6 +111,9 @@ function setupKeyboard(octaveCount)
             gainNode.connect(audioCtx.destination);
 
             oscillator = playNote(frequency, gainNode);
+
+            console.log("Playing note", key.dataset.key, "(" + note + ")", 
+                "of octave", octave, "with a frequency of", frequency);
         }
 
         const pianoKeyDown = e =>
@@ -119,6 +122,8 @@ function setupKeyboard(octaveCount)
             {
                 audioCtx = new AudioContext();
             }
+
+            navigator.vibrate(20);
 
             if(e.button !== undefined && e.button !== 0) return;
 

@@ -23,6 +23,16 @@ body
     overflow-x: hidden;
 }
 
+.noselect 
+{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .piano
 {
     background: #0e0e25;
@@ -33,7 +43,6 @@ body
     justify-content: space-around;
     align-items: center;
     box-shadow: 0 1rem 0 hsl(240, 45%, 20%);
-    user-select: none;
 }
 
 .options
@@ -107,21 +116,14 @@ body
 {
     display: flex;
     align-items: flex-start;
-    user-select: none;
     font-size: min(3rem, 10vmin);
     margin-top: 2rem;
-}
-
-.piano-keyboard *
-{
-    user-select: none;
 }
 
 .piano-keyboard .octave
 {
     display: flex;
     align-items: flex-start;
-    user-select: none;
     opacity: 0;
     transform: translateY(-100%);
     animation: enter 0.5s ease-out forwards;
