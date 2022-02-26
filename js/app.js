@@ -7,20 +7,13 @@ const numResonanceTime = optionsElem.querySelector('#numResonanceTime');
 
 let keys = pianoKeyboard.querySelectorAll('[data-key]');
 
-const notes = {
-    'c': 16.35,
-    'c#': 17.32,
-    'd': 18.35,
-    'd#': 19.45,
-    'e': 20.60,
-    'f': 21.83,
-    'f#': 23.12,
-    'g': 24.50,
-    'g#': 25.96,
-    'a': 27.50,
-    'a#': 29.14,
-    'b': 30.87
-}
+const notes = [
+    'c', 'c#', 'd', 'd#', 
+    'e', 'f', 'f#', 'g', 
+    'g#', 'a', 'a#', 'b'
+];
+
+let getNoteFrequency = n => 16.35 * ((2**(1/12)) ** n)
 
 let audioCtx;
 
@@ -76,9 +69,8 @@ function setupKeyboard(octaveCount)
 
     keys.forEach(key =>
     {
-        let note = notes[key.dataset.key];
         let octave = key.parentElement.dataset.octave;
-        let frequency = note * options.octaveOffset * octave;
+        let frequency = (octave * 2**Number(options.octaveOffset)) * getNoteFrequency(key.dataset.key);
 
         let gainNode;
         let oscillator;
@@ -90,7 +82,7 @@ function setupKeyboard(octaveCount)
             // slideOctaveOffset.value = factor;
             // slideOctaveOffset.title = factor;
             options.octaveOffset = factor;
-            frequency = note * options.octaveOffset * octave;
+            frequency = (octave * 2**factor) * getNoteFrequency(key.dataset.key);
             
             saveOptions();
         }
@@ -103,17 +95,15 @@ function setupKeyboard(octaveCount)
         {
             key.classList.add('active');
 
-            const keyId = key.dataset.key + octave;
-
             if(oscillator) oscillator.stop(audioCtx.currentTime);
 
             gainNode = audioCtx.createGain();
             gainNode.connect(audioCtx.destination);
-
-            oscillator = playNote(frequency, gainNode);
-
-            console.log("Playing note", key.dataset.key, "(" + note + ")", 
+            console.log("Playing note", key.dataset.key, "(" + notes[key.dataset.key] + ")", 
                 "of octave", octave, "with a frequency of", frequency);
+            
+            
+            oscillator = playNote(frequency, gainNode);
         }
 
         const pianoKeyDown = e =>

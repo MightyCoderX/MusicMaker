@@ -11,7 +11,7 @@ function generateOctaves(count)
     {
         const newOctave = octaveTemplate.content.cloneNode(true).firstElementChild;
 
-        newOctave.dataset.octave = i;
+        newOctave.dataset.octave = 2 ** (i-1);
 
         newOctave.style.animationDelay = `${i*0.1}s`;
         newOctave.style.animationPlayState = 'running';
