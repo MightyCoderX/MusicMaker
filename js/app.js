@@ -17,6 +17,7 @@ let getNoteFrequency = n => 16.35 * ((2**(1/12)) ** n)
 
 let audioCtx;
 
+//TODO: Limit octaveOffset and octaveCount to account for maximum frequency
 let options = 
 {
     octaveCount: window.innerWidth < 700 ? 1 : 2,
@@ -67,6 +68,7 @@ function setupKeyboard(octaveCount)
 
     keys = pianoKeyboard.querySelectorAll('[data-key]');
 
+    //TODO: Optimize by not declaring the same functions for every key
     keys.forEach(key =>
     {
         let octave = key.parentElement.dataset.octave;
