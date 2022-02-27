@@ -7,11 +7,11 @@ function generateOctaves(count)
     .setProperty('--octave-count', ` ${count}`);
 
     pianoKeyboard.innerHTML = '';
-    for(let i = 1; i <= count; i++)
+    for(let i = 0; i < count; i++)
     {
         const newOctave = octaveTemplate.content.cloneNode(true).firstElementChild;
 
-        newOctave.dataset.octave = 2 ** (i-1);
+        newOctave.dataset.octave = i;
 
         newOctave.style.animationDelay = `${i*0.1}s`;
         newOctave.style.animationPlayState = 'running';

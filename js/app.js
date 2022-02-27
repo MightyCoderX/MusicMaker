@@ -43,8 +43,6 @@ numOctaveCount.value = options.octaveCount;
 numOctaveOffset.value = options.octaveOffset;
 numResonanceTime.value = options.resonanceTime;
 
-let pianoKeyDownArray = [];
-
 numOctaveCount.addEventListener('change', () =>
 {
     options.octaveCount = Number(numOctaveCount.value);
@@ -62,17 +60,53 @@ setupKeyboard(options.octaveCount);
 
 pianoKeyboard.addEventListener('contextmenu', e => e.preventDefault());
 
+let mouseDown;
+let mouseButton;
+
+//TODO: Fix for mobile
+const mouseDownHandler = e =>
+{
+    mouseDown = true;
+    mouseButton = e.button;
+
+    if(!audioCtx)
+    {
+        audioCtx = new AudioContext();
+    }
+
+    const mouseUpHandler = e =>
+    {
+        mouseDown = false;
+
+        window.removeEventListener('mouseup', mouseUpHandler);
+        window.removeEventListener('mouseleave', mouseUpHandler);
+        window.removeEventListener('touchend', mouseUpHandler);
+        window.removeEventListener('touchcancel', mouseUpHandler);
+
+        window.removeEventListener('blur', mouseUpHandler);
+    }
+
+    window.addEventListener('mouseup', mouseUpHandler);
+    window.addEventListener('mouseleave', mouseUpHandler);
+    window.addEventListener('touchend', mouseUpHandler);
+    window.addEventListener('touchcancel', mouseUpHandler);
+    
+    window.addEventListener('blur', mouseUpHandler);
+}
+
+window.addEventListener('mousedown', mouseDownHandler);
+window.addEventListener('touchstart', mouseDownHandler);
+
 function setupKeyboard(octaveCount)
 {
     generateOctaves(octaveCount);
 
     keys = pianoKeyboard.querySelectorAll('[data-key]');
 
-    //TODO: Optimize by not declaring the same functions for every key
     keys.forEach(key =>
     {
         let octave = key.parentElement.dataset.octave;
-        let frequency = (octave * 2**Number(options.octaveOffset)) * getNoteFrequency(key.dataset.key);
+        let frequency = (2**octave * 2**Number(options.octaveOffset)) * getNoteFrequency(key.dataset.key);
 
         let gainNode;
         let oscillator;
@@ -84,7 +118,7 @@ function setupKeyboard(octaveCount)
             // slideOctaveOffset.value = factor;
             // slideOctaveOffset.title = factor;
             options.octaveOffset = factor;
-            frequency = (octave * 2**factor) * getNoteFrequency(key.dataset.key);
+            frequency = (2**octave * 2**factor) * getNoteFrequency(key.dataset.key);
             
             saveOptions();
         }
@@ -110,14 +144,15 @@ function setupKeyboard(octaveCount)
 
         const pianoKeyDown = e =>
         {
+            navigator.vibrate(20);
+            mouseDown = true;
+
             if(!audioCtx)
             {
                 audioCtx = new AudioContext();
             }
 
-            navigator.vibrate(20);
-
-            if(e.button !== undefined && e.button !== 0) return;
+            if(mouseButton !== undefined && mouseButton !== 0) return;
 
             pressPianoKey();        
 
@@ -128,12 +163,10 @@ function setupKeyboard(octaveCount)
             key.addEventListener('touchcancel', pianoKeyUp);
             key.addEventListener('touchend', pianoKeyUp);
         }
-
-        pianoKeyDownArray.push(pianoKeyDown);
         
         const pianoKeyUp = e =>
         {
-            if(e.button !== undefined && e.button !== 0) return;
+            if(mouseButton !== undefined && mouseButton !== 0) return;
 
             key.classList.remove('active');
 
@@ -149,6 +182,14 @@ function setupKeyboard(octaveCount)
             key.removeEventListener('touchend', pianoKeyUp);
         }
 
+        const mouseOverHandler = () => {
+            if(!mouseDown) return;
+            
+            pianoKeyDown();
+        }
+
+        key.addEventListener('mouseover', mouseOverHandler);
+        key.addEventListener('touchmove', mouseOverHandler);
         
         key.addEventListener('mousedown', pianoKeyDown);
         key.addEventListener('touchstart', pianoKeyDown);

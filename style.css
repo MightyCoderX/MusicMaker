@@ -150,7 +150,7 @@ body
     
     width: var(--key-width);
     height: var(--key-height);
-    background-color: hsl(0, 0%, 100%);
+    background-color: #fff;
     border: 1px solid #cacaca;
     border-radius: 0 0 calc(var(--key-width) / 8) calc(var(--key-width) / 8);
     box-shadow: 0 var(--shadow-size) 0 hsl(0, 0%, var(--shadow-lightness)),
@@ -164,6 +164,7 @@ body
 {
     --small-key-width: calc(var(--key-width) / 2);
     --small-key-height: calc(var(--key-height) / 1.6);
+    --small-key-offset: calc(var(--small-key-height) / 10);
     --shadow-lightness: 20%;
     --start-shadow-size: calc(var(--small-key-height) / 15);
 
@@ -172,7 +173,7 @@ body
     height: var(--small-key-height);
     border: 1px solid #666;
     margin-inline: calc(var(--small-key-width) / 2 * -1);
-    top: -0.25em;
+    top: calc(var(--small-key-offset) * -1);
     z-index: 1;
 }
 
@@ -185,5 +186,5 @@ body
 
 .key.small.active
 {
-    top: calc(var(--start-shadow-size) - 0.25em);
+    top: calc(var(--start-shadow-size) - var(--small-key-offset));
 }
