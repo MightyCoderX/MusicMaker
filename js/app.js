@@ -106,10 +106,10 @@ function setupKeyboard(octaveCount)
     keys.forEach(key =>
     {
         let octave = key.parentElement.dataset.octave;
-        let frequency = (2**octave * 2**Number(options.octaveOffset)) * getNoteFrequency(key.dataset.key);
-
-        let gainNode;
-        let oscillator;
+        let nodes = { 
+            oscillator: null, 
+            gainNode: null
+        };
 
         const updateFrequency = e =>
         {
@@ -118,7 +118,6 @@ function setupKeyboard(octaveCount)
             // slideOctaveOffset.value = factor;
             // slideOctaveOffset.title = factor;
             options.octaveOffset = factor;
-            frequency = (2**octave * 2**factor) * getNoteFrequency(key.dataset.key);
             
             saveOptions();
         }
@@ -130,16 +129,8 @@ function setupKeyboard(octaveCount)
         const pressPianoKey = () =>
         {
             key.classList.add('active');
-
-            if(oscillator) oscillator.stop(audioCtx.currentTime);
-
-            gainNode = audioCtx.createGain();
-            gainNode.connect(audioCtx.destination);
-            console.log("Playing note", key.dataset.key, "(" + notes[key.dataset.key] + ")", 
-                "of octave", octave, "with a frequency of", frequency);
             
-            
-            oscillator = playNote(frequency, gainNode);
+            nodes = playNote(notes[key.dataset.key], octave, audioCtx);
         }
 
         const pianoKeyDown = e =>
@@ -170,9 +161,7 @@ function setupKeyboard(octaveCount)
 
             key.classList.remove('active');
 
-            gainNode.gain.setValueAtTime(gainNode.gain.value, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + options.resonanceTime);
-            oscillator.stop(audioCtx.currentTime + options.resonanceTime);
+            stopFrequency(nodes.oscillator, nodes.gainNode, audioCtx);
 
             key.removeEventListener('mouseleave', pianoKeyUp);
             key.removeEventListener('mouseup', pianoKeyUp);
@@ -196,23 +185,50 @@ function setupKeyboard(octaveCount)
     });
 }
 
-function playNote(frequency, gainNode, endcallback)
+function playNote(note, octave, audioCtx)
 {
+    if(!notes.includes(note.toLowerCase())) return;
+
+    const steps = notes.indexOf(note.toLowerCase());
+    const frequency = getNoteFrequency(steps) * (2**octave * 2**Number(options.octaveOffset));
+
+    console.log('Playing note', note, 'of octave', Number(octave), 'with a frequency of', frequency);
+
+    return playFrequency(frequency, audioCtx);
+}
+
+function playFrequency(freq, audioCtx)
+{
+    const attack = 1;
+    const gainNode = audioCtx.createGain();
     const oscillator = audioCtx.createOscillator();
-    oscillator.type = selectWaveType.value;
-    oscillator.frequency.value = frequency;
-    oscillator.connect(gainNode);
 
     gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+    gainNode.connect(audioCtx.destination);
 
-    if(endcallback)
-    {
-        oscillator.addEventListener('ended', endcallback);
-    }
-
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    gainNode.gain.setTargetAtTime(1, audioCtx.currentTime, attack / 1000);
+    oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    oscillator.type = selectWaveType.value;
+    oscillator.connect(gainNode);
     oscillator.start();
 
-    return oscillator;
+    return { oscillator, gainNode };
+}
+
+function stopFrequency(oscillator, gainNode, audioCtx)
+{
+    const attack = 1;
+    const release = options.resonanceTime*100;
+
+    gainNode.gain.setTargetAtTime(0, audioCtx.currentTime + attack / 1000, release / 1000);
+    setTimeout(() =>
+    {
+        oscillator.stop();
+        oscillator.disconnect(gainNode);
+        gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+        gainNode.disconnect(audioCtx.destination);
+    }, attack * 10 + release * 10);
 }
 
 window.addEventListener('close', saveOptions);
