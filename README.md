@@ -7,7 +7,7 @@ Play some music using this!
 ### Available
 - [x] Playable piano keyboard
 - [x] Customizable octave count and offset
-- [x] Recording
+- [x] Recording (Work In Progress...)
 
 ### Coming Soon
 - [ ] Loop Station
