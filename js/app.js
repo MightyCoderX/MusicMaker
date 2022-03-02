@@ -4,6 +4,8 @@ const slideOctaveOffset = optionsElem.querySelector('#slideOctaveOffset');
 const numOctaveOffset = optionsElem.querySelector('#numOctaveOffset');
 const numOctaveCount = optionsElem.querySelector('#numOctaveCount');
 const numResonanceTime = optionsElem.querySelector('#numResonanceTime');
+const recordButton = optionsElem.querySelector('#record');
+const recordedAudioElem = optionsElem.querySelector('#recordedAudio');
 
 let keys = pianoKeyboard.querySelectorAll('[data-key]');
 
@@ -16,8 +18,27 @@ const notes = [
 let getNoteFrequency = n => 16.35 * ((2**(1/12)) ** n)
 
 let audioCtx;
+let dest;
+let mediaRecorder;
+let chunks = [];
 
-//TODO: Limit octaveOffset and octaveCount to account for maximum frequency
+function initializeAudioContext()
+{
+    audioCtx = new AudioContext();
+
+    dest = audioCtx.createMediaStreamDestination();
+    mediaRecorder = new MediaRecorder(dest.stream);
+
+    mediaRecorder.addEventListener('dataavailable', e => chunks.push(e.data));
+
+    mediaRecorder.addEventListener('stop', e =>
+    {
+        const blob = new Blob(chunks, { 'type' : 'audio/mp3; codecs=opus' });
+        recordedAudioElem.src = URL.createObjectURL(blob);
+        chunks = [];
+    });
+}
+
 let options = 
 {
     octaveCount: window.innerWidth < 700 ? 1 : 2,
@@ -71,7 +92,7 @@ const mouseDownHandler = e =>
 
     if(!audioCtx)
     {
-        audioCtx = new AudioContext();
+        initializeAudioContext();
     }
 
     const mouseUpHandler = e =>
@@ -94,6 +115,21 @@ const mouseDownHandler = e =>
     window.addEventListener('blur', mouseUpHandler);
 }
 
+recordButton.addEventListener('click', e =>
+{
+    if(mediaRecorder.state === 'recording')
+    {
+        mediaRecorder.stop();
+        recordButton.textContent = 'Start Recording';
+    }
+    else
+    {
+        mediaRecorder.start();
+        recordButton.textContent = 'Stop Recording';
+
+    }
+});
+
 window.addEventListener('mousedown', mouseDownHandler);
 window.addEventListener('touchstart', mouseDownHandler);
 
@@ -106,7 +142,7 @@ function setupKeyboard(octaveCount)
     keys.forEach(key =>
     {
         let octave = key.parentElement.dataset.octave;
-        let nodes = { 
+        let nodes = {
             oscillator: null, 
             gainNode: null
         };
@@ -131,6 +167,8 @@ function setupKeyboard(octaveCount)
             key.classList.add('active');
             
             nodes = playNote(notes[key.dataset.key], octave, audioCtx);
+
+            nodes.gainNode.connect(dest);
         }
 
         const pianoKeyDown = e =>
@@ -140,7 +178,7 @@ function setupKeyboard(octaveCount)
 
             if(!audioCtx)
             {
-                audioCtx = new AudioContext();
+                initializeAudioContext();
             }
 
             if(mouseButton !== undefined && mouseButton !== 0) return;
