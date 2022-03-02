@@ -3,9 +3,14 @@
 Play some music using this!
 
 ## Features
+
+### Available
 - [x] Playable piano keyboard
 - [x] Customizable octave count and offset
-- [ ] Recording
+- [x] Recording
+
+### Coming Soon
+- [ ] Loop Station
 
 ## ⚠ Disclaimer ⚠
 I'm not a musician so there might be some errors (a lot), please report the ones you find! 
