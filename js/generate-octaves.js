@@ -1,7 +1,4 @@
-const pianoKeyboard = document.querySelector('.piano-keyboard');
-const octaveTemplate = document.getElementById('octaveTemplate');
-
-function generateOctaves(count)
+export function generateOctaves(pianoKeyboard, octaveTemplate, count)
 {
     document.documentElement.style
     .setProperty('--octave-count', ` ${count}`);

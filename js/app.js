@@ -1,3 +1,5 @@
+import { generateOctaves } from './generate-octaves.js';
+
 const optionsElem = document.querySelector('.options');
 const selectWaveType = optionsElem.querySelector('#selectWaveType');
 const slideOctaveOffset = optionsElem.querySelector('#slideOctaveOffset');
@@ -6,6 +8,9 @@ const numOctaveCount = optionsElem.querySelector('#numOctaveCount');
 const numResonanceTime = optionsElem.querySelector('#numResonanceTime');
 const recordButton = optionsElem.querySelector('#btnRecord');
 const recordedAudioElem = optionsElem.querySelector('#recordedAudio');
+const pianoKeyboard = document.querySelector('.piano-keyboard');
+const octaveTemplate = document.getElementById('octaveTemplate');
+
 
 let keys = pianoKeyboard.querySelectorAll('[data-key]');
 
@@ -135,7 +140,7 @@ window.addEventListener('touchstart', mouseDownHandler);
 
 function setupKeyboard(octaveCount)
 {
-    generateOctaves(octaveCount);
+    generateOctaves(pianoKeyboard, octaveTemplate, octaveCount);
 
     keys = pianoKeyboard.querySelectorAll('[data-key]');
 
