@@ -4,7 +4,7 @@ const slideOctaveOffset = optionsElem.querySelector('#slideOctaveOffset');
 const numOctaveOffset = optionsElem.querySelector('#numOctaveOffset');
 const numOctaveCount = optionsElem.querySelector('#numOctaveCount');
 const numResonanceTime = optionsElem.querySelector('#numResonanceTime');
-const recordButton = optionsElem.querySelector('#record');
+const recordButton = optionsElem.querySelector('#btnRecord');
 const recordedAudioElem = optionsElem.querySelector('#recordedAudio');
 
 let keys = pianoKeyboard.querySelectorAll('[data-key]');
