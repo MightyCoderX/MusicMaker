@@ -97,6 +97,22 @@ body
     border-radius: 0.2em;
 }
 
+.options .record button
+{
+    display: block;
+    border: 0.1rem solid blue;
+    background: none;
+    color: inherit;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.options .record button:where(:hover,:focus-visible)
+{
+    background-color: blue;
+}
+
 /* .options .octave-count input[type="number"]
 {
 } */
