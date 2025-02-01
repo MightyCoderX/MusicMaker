@@ -178,7 +178,7 @@ function setupKeyboard(octaveCount)
 
         const pianoKeyDown = e =>
         {
-            navigator.vibrate(20);
+            navigator?.vibrate?.(20);
             mouseDown = true;
 
             if(!audioCtx)
