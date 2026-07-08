@@ -2,7 +2,6 @@ import { generateOctaves } from './generate-octaves.js';
 
 const optionsElem = document.querySelector('.options');
 const selectWaveType = optionsElem.querySelector('#selectWaveType');
-const slideOctaveOffset = optionsElem.querySelector('#slideOctaveOffset');
 const numOctaveOffset = optionsElem.querySelector('#numOctaveOffset');
 const numOctaveCount = optionsElem.querySelector('#numOctaveCount');
 const numResonanceTime = optionsElem.querySelector('#numResonanceTime');
