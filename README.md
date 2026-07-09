@@ -1,21 +1,24 @@
 # Music Maker
 
-Play some music using this!
+A basic digital piano with recording.
 
 ## Features
 
 ### Available
 - [x] Playable piano keyboard
 - [x] Customizable octave count and offset
-- [x] Recording (Work In Progress...)
+- [x] Recording
+- [x] Multitouch presses and slides
 
 ### Coming Soon
+- [ ] Record key presses then replay them
 - [ ] Loop Station
 
-## ⚠ Disclaimer ⚠
-I'm not a musician so there might be some errors (a lot), please report the ones you find! 
-And if you have a suggestion feel free to open an issue and I'll try and implement it!
+> [!WARNING]
+> I'm not a musician so there might be mistakes and/or misconceptions.
+> Please report the ones you find!
+> And if you have a suggestion feel free to open an issue
+> or make a pull request!
 
 ### Known Issues
-- Odd octaves should not be multiplying the base frequency
-- Sound not mixing well when playing a chord or playing with an high resonance time
+- Some distortion is still there when two sounds are playing at the same time
