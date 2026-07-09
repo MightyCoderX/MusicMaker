@@ -309,7 +309,9 @@ function setupKeyboard(octaveCount)
     }, { passive: false });
 }
 
-export function playNoteFor(note, octave = 0, dur) {
+export function playNoteFor(note, dur, octave = 0) {
+    if(dur === undefined) throw Error("duration can't be undefined");
+
     const nodes = playNote(note, octave);
     setTimeout(() => {
         stopFrequency(nodes.oscillator, nodes.gainNode);
@@ -318,6 +320,7 @@ export function playNoteFor(note, octave = 0, dur) {
 
 function playNote(note, octave)
 {
+    if(note === undefined || octave === undefined) throw Error("note and octave can't be undefined");
     if(!notes.includes(note.toLowerCase())) return;
 
     const steps = notes.indexOf(note.toLowerCase());
