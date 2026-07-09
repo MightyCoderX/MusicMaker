@@ -326,7 +326,7 @@ function playNote(note, octave)
     const steps = notes.indexOf(note.toLowerCase());
     const frequency = getNoteFrequency(steps) * (2**octave);
 
-    console.log('Playing note', `${note.toUpperCase()}${Number(octave)} (${frequency}Hz)`);
+    console.log("Playing note %s%d (%.2fHz)", note.toUpperCase(), Number(octave), Number(frequency));
 
     return playFrequency(frequency, audioCtx, masterGain);
 }
