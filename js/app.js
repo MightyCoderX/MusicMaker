@@ -170,7 +170,7 @@ export const pressKey = key => {
     if(!audioCtx) initializeAudioContext();
 
     key.classList.add('active');
-    state.nodes = playNote(state.note, state.octave, audioCtx, masterGain)
+    state.nodes = playNote(state.note, state.octave + options.octaveOffset)
 }
 
 export const releaseKey = key => {
@@ -178,7 +178,7 @@ export const releaseKey = key => {
     if(!state || !state.nodes) return;
 
     key.classList.remove('active');
-    stopFrequency(state.nodes.oscillator, state.nodes.gainNode, audioCtx);
+    stopFrequency(state.nodes.oscillator, state.nodes.gainNode);
     state.nodes = null;
 }
 
@@ -190,7 +190,7 @@ function setupKeyboard(octaveCount)
     keyState = new Map();
 
     keys.forEach(key => keyState.set(key, {
-        octave: key.parentElement.dataset.octave,
+        octave: Number(key.parentElement.dataset.octave),
         nodes: null,
         note: notes[key.dataset.key],
     }));
@@ -324,9 +324,9 @@ function playNote(note, octave)
     if(!notes.includes(note.toLowerCase())) return;
 
     const steps = notes.indexOf(note.toLowerCase());
-    const frequency = getNoteFrequency(steps) * (2**octave * 2**Number(options.octaveOffset));
+    const frequency = getNoteFrequency(steps) * (2**octave);
 
-    console.log('Playing note', `${note.toUpperCase()}${Number(octave) + options.octaveOffset}`, 'with a frequency of', frequency);
+    console.log('Playing note', `${note.toUpperCase()}${Number(octave)} (${frequency}Hz)`);
 
     return playFrequency(frequency, audioCtx, masterGain);
 }
