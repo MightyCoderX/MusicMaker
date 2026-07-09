@@ -311,6 +311,13 @@ function setupKeyboard(octaveCount)
     }, { passive: false });
 }
 
+export function playNoteFor(note, octave = 0, dur) {
+    const nodes = playNote(note, octave);
+    setTimeout(() => {
+        stopFrequency(nodes.oscillator, nodes.gainNode);
+    }, dur);
+}
+
 function playNote(note, octave)
 {
     if(!notes.includes(note.toLowerCase())) return;
