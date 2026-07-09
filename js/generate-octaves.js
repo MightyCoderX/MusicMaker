@@ -1,7 +1,6 @@
 export function generateOctaves(pianoKeyboard, octaveTemplate, count)
 {
-    document.documentElement.style
-    .setProperty('--octave-count', ` ${count}`);
+    document.documentElement.style.setProperty('--octave-count', ` ${count}`);
 
     pianoKeyboard.innerHTML = '';
     for(let i = 0; i < count; i++)
