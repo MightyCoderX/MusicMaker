@@ -145,7 +145,7 @@ const mouseDownHandler = e =>
     window.addEventListener('blur', mouseUpHandler);
 }
 
-recordButton.addEventListener('click', e =>
+recordButton.addEventListener('click', () =>
 {
     if(mediaRecorder.state === 'recording')
     {
