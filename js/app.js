@@ -95,6 +95,13 @@ numResonanceTime.addEventListener('change', () =>
     saveOptions();
 });
 
+numOctaveOffset.addEventListener('input', () => {
+    const factor = Number(numOctaveOffset.value);
+    numOctaveOffset.value = factor;
+    options.octaveOffset = factor;
+    saveOptions();
+});
+
 setupKeyboard(options.octaveCount);
 
 pianoKeyboard.addEventListener('contextmenu', e => e.preventDefault());
@@ -155,15 +162,6 @@ recordButton.addEventListener('click', e =>
 
 window.addEventListener('mousedown', mouseDownHandler);
 window.addEventListener('touchstart', mouseDownHandler);
-
-const updateFrequency = e =>
-{
-    const factor = Number(e.target.value);
-    numOctaveOffset.value = factor;
-    options.octaveOffset = factor;
-    saveOptions();
-}
-numOctaveOffset.addEventListener('input', updateFrequency);
 
 export const pressKey = key => {
     const state = keyState.get(key);
